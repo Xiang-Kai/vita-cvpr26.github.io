@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <meta name="description" content="CoT-VLA: Visual Chain-of-Thought Reasoning for Vision-Language-Action Models">
-  <meta name="keywords" content="Robotics, VLA, VLM, MLLM">
+  <meta name="description" content="Unifying Perception and Action: A Hybrid-Modality Pipeline with Implicit Visual Chain-of-Thought for Robotic Action Generation">
+  <meta name="keywords" content="VLA, Human-to-Robot">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
@@ -34,30 +34,20 @@
     <div class="container">
       <div class="columns is-centered">
         <div class="column is-three-fifths is-centered has-text-centered">
-          <h1 class="title is-size-1 publication-title">CoT-VLA</h1>
-          <h2 class="subtitle is-size-3 publication-subtitle">Visual Chain-of-Thought Reasoning for Vision-Language-Action Models</h2>
-          <!-- <h3 class="subtitle is-size-4 publication-subtitle">CVPR 2025</h3> -->
+          <h1 class="title is-size-1 publication-title">Unifying Perception and Action</h1>
+          <h2 class="subtitle is-size-3 publication-subtitle">A Hybrid-Modality Pipeline with Implicit Visual Chain-of-Thought for Robotic Action Generation</h2>
+          <!-- <h3 class="subtitle is-size-4 publication-subtitle">CVPR 2026</h3> -->
           <div class="is-size-5 publication-authors">
             <span class="author-block">
-              <a href="https://qingqing-zhao.github.io/" target="_blank">Qingqing Zhao</a>&nbsp;&nbsp;
-              <a href="https://research.nvidia.com/person/yao-lu-jason" target="_blank">Yao Lu</a>&nbsp;&nbsp;
-              <a href="https://moojink.com/" target="_blank">Moo Jin Kim</a>&nbsp;&nbsp;
-              <a href="https://zipengfu.github.io/" target="_blank">Zipeng Fu</a>&nbsp;&nbsp;
-              <a href="https://hanlab.mit.edu/team/zhuoyang-zhang" target="_blank">Zhuoyang Zhang</a>&nbsp;&nbsp;
-              <a href="https://openreview.net/profile?id=~Yecheng_Wu1" target="_blank">Yecheng Wu</a>&nbsp;&nbsp; 
-              <a href="https://mli0603.github.io/" target="_blank">Max Li</a>&nbsp;&nbsp;
-              <a href="https://qianlim.github.io/" target="_blank">Qianli Ma</a>&nbsp;&nbsp;
-              <a href="https://hanlab.mit.edu/songhan" target="_blank">Song Han</a>&nbsp;&nbsp;
-              <a href="https://ai.stanford.edu/~cbfinn/" target="_blank">Chelsea Finn</a>&nbsp;&nbsp;
-              <a href="https://ankurhanda.github.io/" target="_blank">Ankur Handa</a>&nbsp;&nbsp;
-              <a href="https://mingyuliu.net/" target="_blank">Ming-Yu Liu</a>&nbsp;&nbsp;
-              <a href="https://xiangdonglai.github.io/" target="_blank">Donglai Xiang*</a>&nbsp;&nbsp;
-              <a href="https://stanford.edu/~gordonwz/" target="_blank">Gordon Wetzstein*</a>&nbsp;&nbsp;
-              <a href="https://tsungyilin.info/" target="_blank">Tsung-Yi Lin*</a>&nbsp;&nbsp;
+              <a href="https://xiang-kai.github.io/" target="_blank">Xiangkai Ma</a>&nbsp;&nbsp;
+              <a href="https://vita-vla.github.io/" target="_blank">Lekai Xing</a>&nbsp;&nbsp;
+              <a href="https://scholar.google.com/citations?hl=zh-CN&user=KliAquAAAAAJ" target="_blank">Han Zhang</a>&nbsp;&nbsp;
+              <a href="http://cs.nju.edu.cn/lwz/" target="_blank">Wenzhong Li*</a>&nbsp;&nbsp;
+              <a href="https://cs.nju.edu.cn/58/1e/c2639a153630/page.htm" target="_blank">Sanglu Lu</a>&nbsp;&nbsp;
             </span>
             <ul class="list-inline-star">
                     <li>
-                        <small><b>*</b>Equal Advising</small> 
+                        <small><b>*</b>Corresponding Author</small> 
                     </li>
               </ul>
           </div>
@@ -66,19 +56,19 @@
             <div class="publication-links">
               <!-- PDF Link. -->
               <span class="link-block">
-                <a href="https://arxiv.org/abs/2503.22020"
+                <a href="https://arxiv.org/abs/2511.19859"
                    class="external-link button is-normal is-rounded is-dark" target="_blank">
                   <span class="icon">
                       <i class="fas fa-file-pdf"></i>
                   </span>
                   <span>arXiv</span>
                 </a>
-              </span>
+              <!-- </span>
               <span class="link-block">
                 <a class="external-link button is-normal is-rounded is-dark">
                   <span>CVPR 2025</span>
                 </a>
-              </span>
+              </span> -->
             </div>
 
         
@@ -141,7 +131,7 @@
 </section>
 
  -->
-<section class="hero teaser">
+<!-- <section class="hero teaser">
   <div class="container is-max-desktop">
     <div class="hero-body">
       <div class="columns is-centered has-text-centered">
@@ -156,7 +146,7 @@
       </div>
     </div>
   </div>
-</section>
+</section> -->
 <section class="section">
   <div class="container is-max-desktop">
     <div class="columns is-centered has-text-centered">
@@ -164,7 +154,7 @@
         <h2 class="title is-4">Abstract</h2>
         <div class="content has-text-justified">
           <p>
-            Vision-language-action models (VLAs) have shown potential in leveraging pre-trained vision-language models and diverse robot demonstrations for learning generalizable sensorimotor control. While this paradigm effectively utilizes large-scale data from both robotic and non-robotic sources, current VLAs primarily focus on direct input-output mappings, lacking the intermediate reasoning steps crucial for complex manipulation tasks. As a result, existing VLAs lack temporal planning or reasoning capability. In this paper, we introduce a method that incorporates explicit visual chain-of-thought (CoT) reasoning into vision-language-action models (VLAs) by predicting future image frames auto-regressively as visual goals before generating a short action sequence to achieve these goals. We introduce CoT-VLA, a state-of-the-art 7B VLA that can understand and generate visual and action tokens. We demonstrates that CoT-VLA achieves strong performance in manipulation tasks in both the real world and simulation benchmarks. 
+            Vision-Language-Action (VLA) models built upon Chain-of-Thought (CoT) have achieved remarkable success in advancing general-purpose robotic agents, owing to its significant perceptual comprehension. Recently, since text-only CoT struggles to adequately capture scene details in complex spatial environments, a highly promising strategy involves leveraging visual priors to guide robotic action generation. Nevertheless, these strategies face two inherent challenges: (i) a modality gap between visual observations and low-level actions, and (ii) unstable training due to competing objectives between visual prediction and action generation. To address these challenges, we propose a Vision-Integrated Trajectory Alignment (VITA) framework that learns a shared discrete latent space for vision and action, enabling joint modeling of perception and motor control. VITA introduces a implicit visual CoT: autoregressively generated tokens is simultaneously decoded into future frames predictions and robot actions, thereby internalizing visual dynamics as an inductive bias for motion planning. Extensive experiments on simulated and real-world environments demonstrate state-of-the-art performance.
           </p>
         </div>
       </div>
@@ -178,9 +168,15 @@
       <div class="column is-four-fifths">
         <h2 class="title is-4">Approach</h2>
         <div class="content has-text-justified has-text-centered">
-          <img src="media/cot_vla_pipeline.png" alt="CoT-VLA Pipeline" style="width: 100%;">
+          <img src="media/approach1.PNG" alt="CoT-VLA Pipeline" style="width: 100%;">
           <p>
-            We build our model on pre-trained VILA-U, a generative multi-modal model pre-trained on interleaved text--image data. The base model then trains on robot demonstrations and action-less videos. During deployment, given a visual observation and a text instruction, the model performs visual chain-of-thought reasoning by generating a subgoal image (upper blue) with causal attention. It then generates a short action sequences with full-attention for robot execution. The system operates in a closed-loop control manner by capturing new observations after executing predicted action sequences.
+            We propose VITA, a novel framework that unifies visual perception and action generation. A cross-modal shared codebook is established, where latent variables are decoded into videos or motion trajectories through forward and inverse dynamics processes respectively. This dual consistency at both the representation level and optimization objectives enables VITA to effectively learn motion knowledge from extensive human demonstrations and robot operation videos.
+          </p>
+        </div>
+        <div class="content has-text-justified has-text-centered">
+          <img src="media/approach2.PNG" alt="CoT-VLA Pipeline" style="width: 100%;">
+          <p>
+            Overview of the VITA framework. Utilizing the cross-modal alignment in (1), visual perception and motor control modalities are unified in the shared discrete latent space, where the dual-autoencoder architectures are illustrated in (2) and (3). Benefiting from the representation alignment, the VLM backbone in (4) generates dynamics-unified tokens via a hybrid attention mechanism. These tokens are decoded into future frames and robot actions, as Internal CoT.
           </p>
         </div>
       </div>
@@ -188,7 +184,7 @@
   </div>
 </section>
 
-<section class="section">
+<!-- <section class="section">
   <div class="container is-max-desktop">
     <div class="columns is-centered">
       <div class="columns is-centered">
@@ -357,7 +353,7 @@
       </div>
     </div>
   </div>
-</section>
+</section> -->
 
 
 </body>
