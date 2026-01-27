@@ -37,42 +37,42 @@
           <h2 class="subtitle is-size-3 publication-subtitle">A Hybrid-Modality Pipeline with Implicit Visual Chain-of-Thought for Robotic Action Generation</h2>
 <!--          <h3 class="subtitle is-size-4 publication-subtitle">CVPR 2026</h3> -->
           <div class="is-size-5 publication-authors">
-            <span class="author-block">
-              <a href="https://xiang-kai.github.io/" target="_blank">Xiangkai Ma</a>&nbsp;&nbsp;
-              <a href="https://vita-vla.github.io/" target="_blank">Lekai Xing</a>&nbsp;&nbsp;
-              <a href="https://scholar.google.com/citations?hl=zh-CN&user=KliAquAAAAAJ" target="_blank">Han Zhang</a>&nbsp;&nbsp;
-              <a href="http://cs.nju.edu.cn/lwz/" target="_blank">Wenzhong Li*</a>&nbsp;&nbsp;
-              <a href="https://cs.nju.edu.cn/58/1e/c2639a153630/page.htm" target="_blank">Sanglu Lu</a>&nbsp;&nbsp;
-            </span>
+<!--            <span class="author-block">-->
+<!--              <a href="https://xiang-kai.github.io/" target="_blank">Xiangkai Ma</a>&nbsp;&nbsp;-->
+<!--              <a href="https://vita-vla.github.io/" target="_blank">Lekai Xing</a>&nbsp;&nbsp;-->
+<!--              <a href="https://scholar.google.com/citations?hl=zh-CN&user=KliAquAAAAAJ" target="_blank">Han Zhang</a>&nbsp;&nbsp;-->
+<!--              <a href="http://cs.nju.edu.cn/lwz/" target="_blank">Wenzhong Li*</a>&nbsp;&nbsp;-->
+<!--              <a href="https://cs.nju.edu.cn/58/1e/c2639a153630/page.htm" target="_blank">Sanglu Lu</a>&nbsp;&nbsp;-->
+<!--            </span>-->
             <ul class="list-inline-star">
                     <li>
-                        <small><b>*</b>Corresponding Author</small> 
+                        <small><b>*</b>Anonymous demo</small>
                     </li>
               </ul>
           </div>
-          <image src="./static/images/logo.png" style="width: 30%;"></image>
+<!--          <image src="./static/images/logo.png" style="width: 30%;"></image>-->
           <div>
             <div class="publication-links">
               <!-- PDF Link. -->
-              <span class="link-block">
-                <a href="https://arxiv.org/pdf/2511.19859"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="fas fa-file-pdf"></i>
-                  </span>
-                  <span>Paper</span>
-                </a>
-              </span>
+<!--              <span class="link-block">-->
+<!--                <a href="https://arxiv.org/pdf/2511.19859"-->
+<!--                   class="external-link button is-normal is-rounded is-dark">-->
+<!--                  <span class="icon">-->
+<!--                      <i class="fas fa-file-pdf"></i>-->
+<!--                  </span>-->
+<!--                  <span>Paper</span>-->
+<!--                </a>-->
+<!--              </span>-->
               <!-- Arxiv Link. -->
-              <span class="link-block">
-                <a href="https://arxiv.org/abs/2511.19859"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="ai ai-arxiv"></i>
-                  </span>
-                  <span>arXiv</span>
-                </a>
-              </span>
+<!--              <span class="link-block">-->
+<!--                <a href="https://arxiv.org/abs/2511.19859"-->
+<!--                   class="external-link button is-normal is-rounded is-dark">-->
+<!--                  <span class="icon">-->
+<!--                      <i class="ai ai-arxiv"></i>-->
+<!--                  </span>-->
+<!--                  <span>arXiv</span>-->
+<!--                </a>-->
+<!--              </span>-->
               <!-- Code Link. -->
               <span class="link-block">
                 <a href="https://github.com/UnifyingPerceptionAndAction/vita"
@@ -83,6 +83,7 @@
                   <span>Code</span>
                   </a>
               </span>
+              <img src="media/approach1.PNG" alt="CoT-VLA Pipeline" style="width: 100%;">
             </div>
           </div>
         </div>
@@ -114,13 +115,10 @@
       <div class="column is-four-fifths">
         <h2 class="title is-4">Approach</h2>
         <div class="content has-text-justified has-text-centered">
-          <img src="media/approach1.PNG" alt="CoT-VLA Pipeline" style="width: 100%;">
+          <img src="media/approach2.PNG" alt="CoT-VLA Pipeline" style="width: 100%;">
           <p>
             We propose VITA, a novel framework that unifies visual perception and action generation. A cross-modal shared codebook is established, where latent variables are decoded into videos or motion trajectories through forward and inverse dynamics processes respectively. This dual consistency at both the representation level and optimization objectives enables VITA to effectively learn motion knowledge from extensive human demonstrations and robot operation videos.
           </p>
-        </div>
-        <div class="content has-text-justified has-text-centered">
-          <img src="media/approach2.PNG" alt="CoT-VLA Pipeline" style="width: 100%;">
           <p>
             Overview of the VITA framework. Utilizing the cross-modal alignment in (1), visual perception and motor control modalities are unified in the shared discrete latent space, where the dual-autoencoder architectures are illustrated in (2) and (3). Benefiting from the representation alignment, the VLM backbone in (4) generates dynamics-unified tokens via a hybrid attention mechanism. These tokens are decoded into future frames and robot actions, as Internal CoT.
           </p>
