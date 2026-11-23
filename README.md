@@ -1,3 +1,3 @@
 # Unifying Perception and Action: A Hybrid-Modality Pipeline with Implicit Visual Chain-of-Thought for Robotic Action Generation
 
-This repository hosts the supplementary materials for the [VITA demonstration website](https://waiting4wind.github.io/vita-cvpr26.github.io/).
+This repository hosts the supplementary materials for the [VITA demonstration website](https://Xiang-Kai.github.io/vita-cvpr26.github.io/).
