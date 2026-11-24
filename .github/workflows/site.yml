@@ -6,14 +6,15 @@ jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7.0.1
         with:
           sparse-checkout: |
             static
             tests
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7.1.0
         with:
           node-version: "22"
+          package-manager-cache: false
       - run: npm test
       - run: node --check static/js/site.js
       - run: node --check static/js/theme-init.js
