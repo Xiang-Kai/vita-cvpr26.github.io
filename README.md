@@ -40,6 +40,9 @@ requests are blocked; playback failures are explicitly synthetic. Tests make no
 model, robot or training calls. CI runs both suites with no automatic retries.
 
 Browser dependencies are development-only and pinned in `package-lock.json`.
+CI uses the matching official Playwright image pinned by its content digest,
+including browsers and system libraries, rather than reinstalling OS packages
+on every run. Update the workflow image together with `@playwright/test`.
 Screenshots/traces remain ignored local diagnostics and are not uploaded by CI.
 To use an existing Chromium installation, set
 `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` to its executable when running the tests.

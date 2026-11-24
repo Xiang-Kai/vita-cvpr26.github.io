@@ -4,11 +4,15 @@ permissions:
   contents: read
 jobs:
   check:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
+    # Keep the image version aligned with @playwright/test in package-lock.json.
+    container:
+      image: mcr.microsoft.com/playwright:v1.65.1-noble@sha256:1507cbfc550a63a6b7396791ca4f00df17beb56342d2447b3f106c306f525579
     steps:
       - uses: actions/checkout@v7.0.1
         with:
+          persist-credentials: false
           sparse-checkout: |
             static
             tests
@@ -22,5 +26,4 @@ jobs:
       - run: node --check static/js/site.js
       - run: node --check static/js/theme-init.js
       - run: npm ci
-      - run: npx playwright install --with-deps chromium webkit
       - run: npm run test:browser
