@@ -1,4 +1,4 @@
-import { recipePlan } from "./recipe.js";
+import { recipePlan, recipeSelection, recipeURL } from "./recipe.js";
 import { initDemos } from "./demo.js";
 
 (() => {
@@ -64,16 +64,52 @@ import { initDemos } from "./demo.js";
 
   const mode = document.querySelector("#recipe-mode");
   const microbatch = document.querySelector("#microbatch");
+  const suite = document.querySelector("#recipe-suite");
   const command = document.querySelector("#recipe-command");
+  const selection = recipeSelection(window.location.search);
+  mode.value = selection.mode;
+  microbatch.value = String(selection.batch);
+  suite.value = selection.suite;
+  const format = (value) => value.toLocaleString("en-US");
   const updateRecipe = () => {
-    const plan = recipePlan(mode.value, Number(microbatch.value));
+    const plan = recipePlan(mode.value, Number(microbatch.value), suite.value);
     command.textContent = plan.command;
     document.querySelector("#batch-description").textContent = plan.description;
+    for (const stage of plan.stages) {
+      const card = document.querySelector(`[data-stage="${stage.name}"]`);
+      for (const field of [
+        "updates",
+        "effectiveBatch",
+        "accumulation",
+        "microsteps",
+      ])
+        card.querySelector(`[data-field="${field}"]`).textContent = format(
+          stage[field],
+        );
+    }
+    document.querySelector("#recipe-precision").textContent =
+      `${plan.precision.toUpperCase()} / SINGLE DEVICE`;
+    document.querySelector("#recipe-microsteps").textContent = format(
+      plan.microsteps,
+    );
+    document.querySelector("#recipe-trials").textContent = format(
+      plan.evaluation.trials,
+    );
+    document.querySelector("#recipe-evaluation").textContent =
+      `${plan.suites.length} ${plan.suites.length === 1 ? "suite" : "suites"} x ${plan.evaluation.tasksPerSuite} ${plan.evaluation.tasksPerSuite === 1 ? "task" : "tasks"}/suite x ${plan.evaluation.episodesPerTask} ${plan.evaluation.episodesPerTask === 1 ? "initial state" : "initial states"}/task`;
+    document.querySelector("#recipe-share").href = recipeURL(
+      window.location.href,
+      mode.value,
+      Number(microbatch.value),
+      suite.value,
+    );
   };
-  mode.disabled = microbatch.disabled = false;
+  mode.disabled = microbatch.disabled = suite.disabled = false;
   mode.addEventListener("change", updateRecipe);
   microbatch.addEventListener("change", updateRecipe);
+  suite.addEventListener("change", updateRecipe);
   updateRecipe();
+  document.querySelector("#recipe-share").hidden = false;
 
   let toastTimer;
   document.querySelectorAll("[data-copy]").forEach((button) => {

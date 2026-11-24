@@ -53,7 +53,8 @@ To use an existing Chromium installation, set
 - `static/css/site.css`: responsive design tokens, light/dark themes and reduced-motion rules.
 - `static/js/site.js`: progressive enhancement, copy controls and navigation.
 - `static/js/demo.js`: on-demand video loading, preview navigation and shareable selection.
-- `static/js/recipe.js`: tested configuration-only command generation.
+- `static/js/recipe.js`: configuration-only command generation, stage budgets and shareable plans.
+- `static/js/recipe-contract.js`: generated defaults from the Python recipe, with no runtime metadata.
 - `static/js/theme-init.js`: optional persisted theme, with a storage-denied fallback.
 - `media/`: unchanged original paper figures and 36 research demonstration videos.
 - `static/images/demo-poster.jpg`: the legacy first-clip poster, retained but no longer loaded.
@@ -78,6 +79,36 @@ and Home/End select clips. Reloading a shared URL restores that clip without
 autoplay. Browsing thumbnails loads only small images; MP4 loading still requires
 an explicit play request. A failed play request leaves a retry button and an
 original-file link available.
+
+## Training Planner
+
+The planner covers two schedules, seven microbatches and either all four LIBERO
+suites or one suite: 70 choices. It distinguishes optimizer updates, accumulated
+training microsteps and requested simulator trials. Suite selection applies to
+training and evaluation; the smoke task limit affects simulation only. Neither
+the counts nor original demonstration videos are measured reference-code results.
+Plan links such as `?plan=paper&batch=16&suite=libero_object#code` restore the
+selection. Invalid choices fall back to the safe, configuration-only smoke plan.
+
+With both repositories checked out and the Python dependencies installed, refresh
+the generated data from the code repository root:
+
+```bash
+python scripts/recipe_budget.py --export-web > ../vita-cvpr26.github.io/static/js/recipe-contract.js
+```
+
+Do not hand-edit or reformat the generated module. Then export the actual browser
+planner's full matrix from this website repository:
+
+```bash
+node scripts/export-recipe-plans.mjs > web-plans.json
+python ../VITA/scripts/recipe_budget.py --check-web-plans web-plans.json
+```
+
+This offline check compares all 70 commands and budgets with the Python
+implementation. It only reads JSON: it does not execute the commands, create
+experiments or allocate a GPU. Keep `web-plans.json` out of commits. Update the
+data, unit tests and no-JavaScript HTML defaults together if recipe defaults change.
 
 ## Preview Provenance
 

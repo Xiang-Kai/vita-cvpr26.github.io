@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
+import { recipePlan } from "../../static/js/recipe.js";
 
 // Only the owned loopback preview server is contacted. Media failures and
 // clipboard/storage denial below are synthetic browser fixtures, not rollouts.
@@ -244,6 +245,60 @@ test("all recipe variants update, and copy never executes a command", async ({
   );
 });
 
+test("suite-aware budgets and share links survive reload without starting a run", async ({
+  page,
+}) => {
+  await page.goto("/?plan=paper&batch=16&suite=libero_object#code");
+  await expect(page.locator("#recipe-mode")).toHaveValue("paper");
+  await expect(page.locator("#microbatch")).toHaveValue("16");
+  await expect(page.locator("#recipe-suite")).toHaveValue("libero_object");
+  await expect(page.locator("#recipe-microsteps")).toHaveText("19,920,000");
+  await expect(page.locator("#recipe-trials")).toHaveText("500");
+  for (const mode of ["smoke", "paper"]) {
+    await page.selectOption("#recipe-mode", mode);
+    for (const suite of [
+      "all",
+      "libero_spatial",
+      "libero_object",
+      "libero_goal",
+      "libero_10",
+    ]) {
+      await page.selectOption("#recipe-suite", suite);
+      const plan = recipePlan(mode, 16, suite);
+      await expect(page.locator("#recipe-command")).toHaveText(plan.command);
+      await expect(page.locator("#recipe-trials")).toHaveText(
+        plan.evaluation.trials.toLocaleString("en-US"),
+      );
+      for (const stage of plan.stages) {
+        for (const field of [
+          "updates",
+          "effectiveBatch",
+          "accumulation",
+          "microsteps",
+        ]) {
+          await expect(
+            page.locator(
+              `[data-stage="${stage.name}"] [data-field="${field}"]`,
+            ),
+          ).toHaveText(stage[field].toLocaleString("en-US"));
+        }
+      }
+    }
+  }
+  await page.locator("#recipe-share").click();
+  await page.reload();
+  await expect(page.locator("#recipe-suite")).toHaveValue("libero_10");
+  await expect(page.locator("#recipe-mode")).toHaveValue("paper");
+  await page.locator(".recipe-notes summary").click();
+  await expect(page.locator(".recipe-notes")).toContainText(
+    "not the training task set",
+  );
+  await page.goto("/?plan=paper&batch=3&suite=unknown#code");
+  await expect(page.locator("#recipe-mode")).toHaveValue("smoke");
+  await expect(page.locator("#recipe-suite")).toHaveValue("all");
+  await expect(page.locator("#recipe-trials")).toHaveText("4");
+});
+
 test("paper and all video links remain usable without JavaScript", async ({
   browser,
 }) => {
@@ -271,5 +326,10 @@ test("paper and all video links remain usable without JavaScript", async ({
   const hero = await page.locator(".hero-meta").boundingBox();
   expect(nav.y + nav.height).toBeLessThan(hero.y);
   await expect(page.locator("#recipe-command")).toContainText("--smoke");
+  await expect(page.locator("#recipe-suite")).toBeDisabled();
+  await expect(page.locator("#recipe-trials")).toHaveText("4");
+  await expect(page.locator("#recipe-microsteps")).toHaveText("6");
+  await page.locator(".recipe-notes summary").click();
+  await expect(page.locator(".recipe-notes p").first()).toBeVisible();
   await context.close();
 });

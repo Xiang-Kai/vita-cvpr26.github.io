@@ -3,7 +3,8 @@ import assert from "node:assert/strict";
 import { readFileSync, existsSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { recipePlan } from "../static/js/recipe.js";
+import { recipePlan, recipeSelection, recipeURL } from "../static/js/recipe.js";
+import { recipeContract } from "../static/js/recipe-contract.js";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const html = readFileSync(resolve(root, "index.html"), "utf8");
@@ -88,6 +89,29 @@ test("resources are first-party local files and legacy template requests are rem
 test("the no-script command matches the default interactive smoke plan", () => {
   const command = html.match(/<code id="recipe-command">([^<]+)<\/code>/)?.[1];
   assert.equal(command, recipePlan("smoke", 2).command);
+  const plan = recipePlan("smoke", 2);
+  assert.equal(
+    html
+      .match(/id="batch-description"[^>]*>([^<]+)</)?.[1]
+      .trim()
+      .replace(/\s+/g, " "),
+    plan.description,
+  );
+  for (const stage of plan.stages) {
+    const card = html.match(
+      new RegExp(`<article data-stage="${stage.name}">([\\s\\S]*?)</article>`),
+    )?.[1];
+    for (const field of [
+      "updates",
+      "effectiveBatch",
+      "accumulation",
+      "microsteps",
+    ])
+      assert.equal(
+        Number(card.match(new RegExp(`data-field="${field}">([^<]+)</`))?.[1]),
+        stage[field],
+      );
+  }
 });
 
 test("all paper-plan microbatches match the actual single-device training budget", () => {
@@ -128,4 +152,89 @@ test("command builder rejects invalid and injectable choices", () => {
     assert.throws(() => recipePlan("paper", batch));
   }
   assert.throws(() => recipePlan("unsupported", 2));
+  for (const suite of [
+    "",
+    "unknown",
+    "__proto__",
+    ["libero_object"],
+    "libero_object; echo invalid",
+  ])
+    assert.throws(() => recipePlan("smoke", 2, suite));
+});
+
+test("all 70 plans expose consistent stage microsteps and simulation requests", () => {
+  let count = 0;
+  for (const mode of ["smoke", "paper"]) {
+    for (const batch of recipeContract.microbatches) {
+      for (const suite of ["all", ...recipeContract.suites]) {
+        const plan = recipePlan(mode, batch, suite);
+        assert.deepEqual(
+          plan.suites,
+          suite === "all" ? recipeContract.suites : [suite],
+        );
+        assert.equal(plan.stages.length, 3);
+        assert.equal(
+          plan.stages.reduce((sum, stage) => sum + stage.updates, 0),
+          plan.updates,
+        );
+        assert.equal(
+          plan.stages.reduce((sum, stage) => sum + stage.microsteps, 0),
+          plan.microsteps,
+        );
+        for (const stage of plan.stages) {
+          assert.equal(stage.microsteps, stage.updates * stage.accumulation);
+          assert.equal(stage.effectiveBatch, batch * stage.accumulation);
+        }
+        assert.equal(
+          plan.evaluation.trials,
+          (suite === "all" ? 4 : 1) * (mode === "smoke" ? 1 : 500),
+        );
+        if (suite !== "all")
+          assert.ok(plan.command.endsWith(`--suites ${suite}`));
+        assert.doesNotMatch(plan.command, /--stage|--device|libero_recipe run/);
+        count++;
+      }
+    }
+  }
+  assert.equal(count, 70);
+  assert.equal(recipePlan("paper", 16).microsteps, 19920000);
+  assert.equal(recipePlan("smoke", 64).microsteps, 6);
+});
+
+test("shareable plans use validated canonical choices and omit unrelated query values", () => {
+  const href = recipeURL(
+    "https://example.invalid/project/?unrelated=value&demo=calvin#demos",
+    "paper",
+    16,
+    "libero_goal",
+  );
+  assert.equal(
+    href,
+    "https://example.invalid/project/?plan=paper&batch=16&suite=libero_goal#code",
+  );
+  assert.deepEqual(recipeSelection(new URL(href).search), {
+    mode: "paper",
+    batch: 16,
+    suite: "libero_goal",
+  });
+  for (const query of [
+    "?plan=invalid",
+    "?batch=3",
+    "?batch=2.0",
+    "?batch=1e0",
+    "?batch=",
+    "?batch=Infinity",
+    "?suite=unknown",
+    "?suite=libero_goal%3Becho",
+  ])
+    assert.deepEqual(recipeSelection(query), {
+      mode: "smoke",
+      batch: 2,
+      suite: "all",
+    });
+  assert.deepEqual(recipeSelection(""), {
+    mode: "smoke",
+    batch: 2,
+    suite: "all",
+  });
 });

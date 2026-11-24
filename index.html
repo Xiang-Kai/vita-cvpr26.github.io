@@ -647,14 +647,15 @@
             <div class="starter-heading">
               <div>
                 <p class="eyebrow">PREPARE YOUR EXPERIMENT</p>
-                <h3>A small first step.</h3>
+                <h3>Know the work before the run.</h3>
                 <p>
                   After
                   <a
                     href="https://github.com/Xiang-Kai/VITA/blob/main/docs/quickstart.md#1-install"
                     >installing the package</a
-                  >, generate an explicit configuration. Nothing starts training
-                  here.
+                  >, choose a plan and inspect its actual budget. This prepares
+                  the compact reference model, not the paper-scale model.
+                  Nothing starts training here.
                 </p>
               </div>
               <span class="pill">CONFIGURATION ONLY</span>
@@ -663,7 +664,7 @@
               <label for="recipe-mode"
                 >Training plan<select id="recipe-mode" disabled>
                   <option value="smoke">Smoke / 6 updates</option>
-                  <option value="paper">Paper budget / 360,000 updates</option>
+                  <option value="paper">Paper / 360K updates</option>
                 </select></label
               ><label for="microbatch"
                 >Microbatch<select id="microbatch" disabled>
@@ -675,10 +676,129 @@
                   <option>32</option>
                   <option>64</option>
                 </select></label
+              ><label for="recipe-suite"
+                >LIBERO suites<select id="recipe-suite" disabled>
+                  <option value="all">All four suites</option>
+                  <option value="libero_spatial">Spatial</option>
+                  <option value="libero_object">Object</option>
+                  <option value="libero_goal">Goal</option>
+                  <option value="libero_10">Long (LIBERO-10)</option>
+                </select></label
               >
               <p id="batch-description" role="status">
-                Effective batch: 2 in both stages. Smoke only.
+                6 optimizer updates / 6 training microsteps. 4 requested
+                simulator trials. Smoke only.
               </p>
+            </div>
+            <div
+              class="recipe-budget"
+              role="group"
+              aria-label="Configured training budget"
+            >
+              <div class="recipe-budget-heading">
+                <p class="eyebrow">THREE STAGES / ONE EXPLICIT PLAN</p>
+                <span id="recipe-precision">FLOAT32 / SINGLE DEVICE</span>
+              </div>
+              <div class="recipe-stages">
+                <article data-stage="warmup">
+                  <h4><span>01</span> Warmup</h4>
+                  <p class="stage-updates">
+                    <strong data-field="updates">2</strong> optimizer updates
+                  </p>
+                  <dl>
+                    <div>
+                      <dt>Effective batch</dt>
+                      <dd data-field="effectiveBatch">2</dd>
+                    </div>
+                    <div>
+                      <dt>Accumulation</dt>
+                      <dd data-field="accumulation">1</dd>
+                    </div>
+                    <div>
+                      <dt>Training microsteps</dt>
+                      <dd data-field="microsteps">2</dd>
+                    </div>
+                  </dl>
+                </article>
+                <article data-stage="cotrain">
+                  <h4><span>02</span> Co-training</h4>
+                  <p class="stage-updates">
+                    <strong data-field="updates">2</strong> optimizer updates
+                  </p>
+                  <dl>
+                    <div>
+                      <dt>Effective batch</dt>
+                      <dd data-field="effectiveBatch">2</dd>
+                    </div>
+                    <div>
+                      <dt>Accumulation</dt>
+                      <dd data-field="accumulation">1</dd>
+                    </div>
+                    <div>
+                      <dt>Training microsteps</dt>
+                      <dd data-field="microsteps">2</dd>
+                    </div>
+                  </dl>
+                </article>
+                <article data-stage="finetune">
+                  <h4><span>03</span> Action fine-tuning</h4>
+                  <p class="stage-updates">
+                    <strong data-field="updates">2</strong> optimizer updates
+                  </p>
+                  <dl>
+                    <div>
+                      <dt>Effective batch</dt>
+                      <dd data-field="effectiveBatch">2</dd>
+                    </div>
+                    <div>
+                      <dt>Accumulation</dt>
+                      <dd data-field="accumulation">1</dd>
+                    </div>
+                    <div>
+                      <dt>Training microsteps</dt>
+                      <dd data-field="microsteps">2</dd>
+                    </div>
+                  </dl>
+                </article>
+              </div>
+              <div class="recipe-totals">
+                <div>
+                  <p class="eyebrow">TOTAL TRAINING MICROSTEPS</p>
+                  <p class="recipe-total" id="recipe-microsteps">6</p>
+                  <p>
+                    One microbatch per forward/backward pass. Evaluation and
+                    export are additional work.
+                  </p>
+                </div>
+                <div>
+                  <p class="eyebrow">REQUESTED SIMULATOR TRIALS</p>
+                  <p class="recipe-total" id="recipe-trials">4</p>
+                  <p id="recipe-evaluation">
+                    4 suites x 1 task/suite x 1 initial state/task
+                  </p>
+                </div>
+              </div>
+              <details class="recipe-notes">
+                <summary>What these numbers do, and do not, mean</summary>
+                <p>
+                  Effective batch = microbatch x accumulation. An optimizer
+                  update follows that many training microsteps. Counts are not
+                  time or GPU-memory estimates; a smaller microbatch still needs
+                  suitable hardware.
+                </p>
+                <p>
+                  Suite selection applies to training and evaluation. The smoke
+                  task limit applies only to simulation, not the training task
+                  set or offline evaluation. Full plans need all ten tasks in
+                  each selected suite.
+                </p>
+                <p>
+                  Trials are requested work, not measured successes. They
+                  require existing LIBERO tasks and initial states. A subset is
+                  not the full benchmark. Matching paper update budgets does not
+                  match its data, model or results.
+                </p>
+              </details>
             </div>
             <div class="terminal">
               <div class="terminal-bar">
@@ -701,7 +821,12 @@
   --microbatch 2 --episodes-per-task 1 --max-tasks 1</code></pre>
             </div>
             <p class="starter-foot">
-              Use a new output directory for each experiment.
+              <span
+                >Use a new output directory for each experiment.
+                <a id="recipe-share" href="#code" hidden
+                  >Link to this plan &#8599;</a
+                ></span
+              >
               <a
                 href="https://github.com/Xiang-Kai/VITA/blob/main/docs/quickstart.md"
                 >Continue with data, training and evaluation &#8599;</a
