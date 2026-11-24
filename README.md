@@ -65,9 +65,10 @@ The page no longer loads the old template's jQuery, carousel, icon or unrelated
 interpolation-frame scripts. Original legacy assets remain in Git history;
 they are not dependencies of the new page.
 
-Videos never autoplay. With JavaScript, the selected source is assigned only
-after an explicit play request; browsing clips does not fetch media. Without
-JavaScript, the initial player uses `preload="none"`. Original-file
+Videos never autoplay. The enhanced player's initial HTML has no media source;
+the selected source is assigned only after an explicit play request, so even
+an eager preload scanner cannot start the first clip. Without JavaScript, a
+separate native player inside `noscript` uses `preload="none"`. Original-file
 links remain available when JavaScript is disabled. The command builder only
 prepares configuration; it cannot start a training job.
 

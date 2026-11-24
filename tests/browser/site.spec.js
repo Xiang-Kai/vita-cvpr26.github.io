@@ -43,6 +43,7 @@ test("all 36 clips have previews, direct links and no media requests before play
   });
   await page.goto("/");
   await expect(page.locator("#demo-group")).toBeEnabled();
+  await expect(page.locator("video")).toHaveCount(1);
   const groups = await page
     .locator("#demo-group option")
     .evaluateAll((options) =>
@@ -259,6 +260,12 @@ test("paper and all video links remain usable without JavaScript", async ({
   await page.goto("http://127.0.0.1:4173/");
   await expect(page.locator("#nav-links")).toBeVisible();
   await expect(page.locator("#demo-group")).toBeDisabled();
+  await expect(page.locator("#demo-fallback")).toBeVisible();
+  await expect(page.locator("#demo-fallback")).toHaveAttribute(
+    "src",
+    "media/ur5e/video1.mp4",
+  );
+  await expect(page.locator("#demo-video")).not.toBeVisible();
   await expect(page.locator(".video-archive a")).toHaveCount(36);
   const nav = await page.locator(".site-nav").boundingBox();
   const hero = await page.locator(".hero-meta").boundingBox();

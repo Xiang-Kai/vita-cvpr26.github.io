@@ -29,7 +29,10 @@ test("homepage retains all 36 original demonstration sources without autoplay", 
     ),
   ];
   assert.deepEqual(videos.sort(), expected.sort());
-  assert.equal((html.match(/<video\b/g) ?? []).length, 1);
+  const enhanced = html.replace(/<noscript>[\s\S]*?<\/noscript>/g, "");
+  assert.equal((enhanced.match(/<video\b/g) ?? []).length, 1);
+  assert.doesNotMatch(enhanced.match(/<video\b[^>]*>/)?.[0] ?? "", /\bsrc=/);
+  assert.match(html, /id="demo-fallback"/);
   assert.match(html, /preload="none"/);
   assert.doesNotMatch(html, /\bautoplay\b(?=[^<>]*>)/);
   assert.match(text, /research demonstration videos/);

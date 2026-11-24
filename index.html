@@ -304,12 +304,10 @@
               <div class="demo-player">
                 <video
                   id="demo-video"
-                  controls
                   playsinline
                   preload="none"
                   poster="static/images/demos/ur5e/video1.webp"
                   aria-label="Color matching, clip 1"
-                  src="media/ur5e/video1.mp4"
                 >
                   Your browser does not support video.
                   <a href="media/ur5e/video1.mp4">Open the video directly.</a>
@@ -322,6 +320,24 @@
                   <span>Loads only this clip</span>
                 </button>
               </div>
+              <noscript>
+                <style>
+                  .demo-player {
+                    display: none;
+                  }
+                </style>
+                <video
+                  id="demo-fallback"
+                  controls
+                  playsinline
+                  preload="none"
+                  poster="static/images/demos/ur5e/video1.webp"
+                  aria-label="Color matching, clip 1"
+                  src="media/ur5e/video1.mp4"
+                >
+                  <a href="media/ur5e/video1.mp4">Open the video directly.</a>
+                </video>
+              </noscript>
               <div class="video-caption">
                 <span id="demo-kind">REAL WORLD</span
                 ><span id="demo-counter">CLIP 01 / 03</span>
