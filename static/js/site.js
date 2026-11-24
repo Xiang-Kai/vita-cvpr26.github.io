@@ -1,4 +1,5 @@
 import { recipePlan } from "./recipe.js";
+import { initDemos } from "./demo.js";
 
 (() => {
   "use strict";
@@ -19,6 +20,13 @@ import { recipePlan } from "./recipe.js";
   document
     .querySelectorAll("#nav-links a")
     .forEach((link) => link.addEventListener("click", closeMenu));
+  document.addEventListener("pointerdown", (event) => {
+    if (!nav.contains(event.target)) closeMenu();
+  });
+  document.addEventListener("focusin", (event) => {
+    if (!nav.contains(event.target)) closeMenu();
+  });
+  window.matchMedia("(min-width: 761px)").addEventListener("change", closeMenu);
   document.addEventListener("keydown", (event) => {
     if (
       event.key === "Escape" &&
@@ -52,79 +60,7 @@ import { recipePlan } from "./recipe.js";
   });
   root.classList.add("enhanced");
 
-  const group = document.querySelector("#demo-group");
-  const video = document.querySelector("#demo-video");
-  const play = document.querySelector("#demo-play");
-  const clips = document.querySelector("#demo-clips");
-  const status = document.querySelector("#demo-status");
-  const poster = video.getAttribute("poster");
-  let selectedSource;
-  const chooseClip = (index) => {
-    const data = group.selectedOptions[0].dataset;
-    const source = `media/${data.folder}/video${Number(data.offset) + index + 1}.mp4`;
-    selectedSource = source;
-    video.pause();
-    // Withhold the source until an explicit play request, not just a preload hint.
-    video.removeAttribute("src");
-    video.controls = false;
-    video.load();
-    if (source === "media/ur5e/video1.mp4")
-      video.setAttribute("poster", poster);
-    else video.removeAttribute("poster");
-    play.hidden = false;
-    play.setAttribute("aria-label", `Play ${data.title}, clip ${index + 1}`);
-    video.setAttribute("aria-label", `${data.title}, clip ${index + 1}`);
-    document.querySelector("#demo-title").textContent = data.title;
-    document.querySelector("#demo-description").textContent = data.description;
-    document.querySelector("#demo-kind").textContent = data.kind.toUpperCase();
-    document.querySelector("#demo-counter").textContent =
-      `CLIP ${String(index + 1).padStart(2, "0")} / ${String(data.count).padStart(2, "0")}`;
-    document.querySelector("#demo-download").href = source;
-    status.textContent = "Press play to load the selected video. No autoplay.";
-    clips.querySelectorAll("button").forEach((button, position) => {
-      button.setAttribute("aria-pressed", String(position === index));
-    });
-  };
-  const chooseGroup = () => {
-    const data = group.selectedOptions[0].dataset;
-    clips.replaceChildren();
-    for (let index = 0; index < Number(data.count); index++) {
-      const button = document.createElement("button");
-      button.type = "button";
-      button.textContent = String(index + 1).padStart(2, "0");
-      button.setAttribute("aria-label", `Clip ${index + 1} of ${data.count}`);
-      button.addEventListener("click", () => chooseClip(index));
-      clips.append(button);
-    }
-    chooseClip(0);
-  };
-  group.disabled = false;
-  group.addEventListener("change", () => chooseGroup());
-  chooseGroup();
-  play.addEventListener("click", async () => {
-    const source = selectedSource;
-    play.hidden = true;
-    video.controls = true;
-    video.src = source;
-    video.focus();
-    status.textContent = "Loading the selected video...";
-    try {
-      await video.play();
-      if (source === selectedSource)
-        status.textContent = "Use the video controls to pause or seek.";
-    } catch {
-      if (source === selectedSource)
-        status.textContent =
-          "Playback did not start. Use the video controls or open the original video.";
-    }
-  });
-  video.addEventListener("error", () => {
-    status.textContent =
-      "This video could not load. Try the original video link below.";
-  });
-  document.addEventListener("visibilitychange", () => {
-    if (document.hidden) video.pause();
-  });
+  initDemos();
 
   const mode = document.querySelector("#recipe-mode");
   const microbatch = document.querySelector("#microbatch");

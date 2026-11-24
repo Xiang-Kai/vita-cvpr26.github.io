@@ -96,9 +96,22 @@ select:hover {
   border-color: var(--accent);
 }
 select {
-  padding: 12px;
+  appearance: none;
+  -webkit-appearance: none;
+  padding: 12px 36px 12px 12px;
   width: 100%;
   min-width: 0;
+  min-height: 48px;
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--muted) 50%),
+    linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+  background-position:
+    calc(100% - 19px) 50%,
+    calc(100% - 14px) 50%;
+  background-size:
+    5px 5px,
+    5px 5px;
+  background-repeat: no-repeat;
 }
 img,
 video {
@@ -527,7 +540,7 @@ details[open] > summary > span {
 }
 .demo-screen video {
   width: 100%;
-  aspect-ratio: 4/3;
+  aspect-ratio: 16/10;
   object-fit: contain;
   background: #282525;
 }
@@ -591,24 +604,72 @@ details[open] > summary > span {
   margin-top: 14px;
 }
 .clip-buttons {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(var(--clip-count, 3), minmax(0, 1fr));
   gap: 8px;
-  margin: 24px 0 14px;
+  padding: 4px 20px 20px;
+}
+.clip-buttons:empty {
+  display: none;
 }
 .clip-buttons button {
+  position: relative;
   font: 12px var(--mono);
-  min-width: 42px;
-  min-height: 42px;
+  padding: 3px;
+  min-width: 0;
+  min-height: 44px;
+  border: 2px solid transparent;
+  background: #393331;
+  overflow: hidden;
+  border-radius: 6px;
+}
+.clip-buttons img {
+  width: 100%;
+  aspect-ratio: 8/5;
+  object-fit: contain;
+  background: #221f1e;
+  border-radius: 2px;
+}
+.clip-buttons button > span {
+  display: block;
+  padding: 4px;
+  color: #f7eee5;
 }
 .clip-buttons button[aria-pressed="true"] {
+  background: #ffdc81;
+  border-color: #ffdc81;
+}
+.clip-buttons button[aria-pressed="true"] > span {
   color: #382e2a;
-  background: var(--gold);
-  border-color: #dbb452;
+}
+.clip-buttons button:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+.demo-pagination {
+  display: flex;
+  gap: 8px;
+  margin: 24px 0 16px;
+  flex-wrap: wrap;
+}
+.demo-pagination:has([hidden]) {
+  display: none;
+}
+.demo-pagination button {
+  min-height: 44px;
+  font-size: 12px;
+}
+.demo-pagination button:disabled {
+  opacity: 0.45;
+  cursor: default;
+  border-color: var(--line);
 }
 #demo-download {
   margin-top: auto;
   padding-top: 22px;
+}
+#demo-share {
+  padding-top: 14px;
 }
 .video-archive {
   margin-top: 26px;
@@ -1035,7 +1096,7 @@ footer .wrap {
     grid-template-columns: 1fr;
   }
   .demo-screen video {
-    aspect-ratio: 4/3;
+    aspect-ratio: 16/10;
     max-height: 60vh;
   }
   .demo-controls {

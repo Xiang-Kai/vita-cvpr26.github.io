@@ -290,7 +290,7 @@
             <div>
               <p class="lead">
                 Browse the original real-world and simulation demonstrations.
-                Select a task family, then a clip.
+                Select a task family, preview its clips, then press play.
               </p>
               <p class="scope-note">
                 These are research demonstration videos, not rollouts produced
@@ -307,7 +307,7 @@
                   controls
                   playsinline
                   preload="none"
-                  poster="static/images/demo-poster.jpg"
+                  poster="static/images/demos/ur5e/video1.webp"
                   aria-label="Color matching, clip 1"
                   src="media/ur5e/video1.mp4"
                 >
@@ -326,6 +326,12 @@
                 <span id="demo-kind">REAL WORLD</span
                 ><span id="demo-counter">CLIP 01 / 03</span>
               </div>
+              <div
+                id="demo-clips"
+                class="clip-buttons"
+                role="group"
+                aria-label="Choose a clip; use left and right arrow keys"
+              ></div>
             </div>
             <div class="demo-controls">
               <p class="eyebrow">36 CLIPS / 8 TASK GROUPS</p>
@@ -424,12 +430,12 @@
               <p id="demo-description">
                 Place the blocks on the towel of the same color.
               </p>
-              <div
-                id="demo-clips"
-                class="clip-buttons"
-                role="group"
-                aria-label="Choose a clip"
-              ></div>
+              <div class="demo-pagination">
+                <button id="demo-previous" type="button" hidden>
+                  Previous clip
+                </button>
+                <button id="demo-next" type="button" hidden>Next clip</button>
+              </div>
               <p id="demo-status" class="fine" role="status">
                 Press play to load the selected video. No autoplay.
               </p>
@@ -439,6 +445,14 @@
                 href="media/ur5e/video1.mp4"
                 >Open original video <span aria-hidden="true">&#8599;</span></a
               >
+              <a
+                id="demo-share"
+                class="text-link"
+                href="?demo=color&amp;clip=1#demos"
+                hidden
+              >
+                Link to this clip <span aria-hidden="true">&#8599;</span>
+              </a>
             </div>
           </div>
           <details class="video-archive">

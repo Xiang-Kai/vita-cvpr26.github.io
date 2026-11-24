@@ -5,12 +5,15 @@ permissions:
 jobs:
   check:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7.0.1
         with:
           sparse-checkout: |
             static
             tests
+            scripts
+            media
       - uses: actions/setup-node@v7.1.0
         with:
           node-version: "22"
@@ -18,3 +21,6 @@ jobs:
       - run: npm test
       - run: node --check static/js/site.js
       - run: node --check static/js/theme-init.js
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium webkit
+      - run: npm run test:browser
